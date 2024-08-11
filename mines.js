@@ -144,7 +144,10 @@ function checkTile () {
 			for (let c = 0; c < width[difficulty];  c ++)
 				if (mineField[r][c]=='1')
 					document.getElementById(r + "-" + c).innerText = '\u263C';
-		gameOver = true;
+		if(confirm("You lost!"))
+			setGame();
+		else
+			gameOver = true;
 	}
 	
 	if (goal == 0) {

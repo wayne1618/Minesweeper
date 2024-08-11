@@ -148,7 +148,7 @@ function checkTile () {
 			for (let c = 0; c < width[difficulty];  c ++)
 				if (mineField[r][c]=='1')
 					document.getElementById(r + "-" + c).innerText = '\u263C';
-		if(confirm("djfs"))
+		if(confirm("You Lost!"))
 		{
 			resetTiles();
 			setGame();

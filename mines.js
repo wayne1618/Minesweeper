@@ -108,11 +108,15 @@ function setGame () {
 function setDiff () {
 	difficulty = difficulties.indexOf(this.id);
 	document.getElementById("field").setAttribute("class", diffs[difficulty]);
-	var tiles = document.getElementsByClassName("tile");
-	while(tiles.length > 0)
-		tiles [0].remove();
+	resetTiles();
 	document.getElementsByTagName("h1").innerText = difficulty;
 	setGame();
+}
+
+function resetTiles () {	
+	let tiles = document.getElementsByClassName("tile");
+	while(tiles.length > 0)
+		tiles [0].remove();
 }
 
 function checkTile () {
@@ -144,13 +148,20 @@ function checkTile () {
 			for (let c = 0; c < width[difficulty];  c ++)
 				if (mineField[r][c]=='1')
 					document.getElementById(r + "-" + c).innerText = '\u263C';
-		if(confirm("You lost!"))
+		if(confirm("djfs"))
+		{
+			resetTiles();
 			setGame();
+		}
 		else
-			gameOver = true;
+		gameOver = true;
 	}
 	
 	if (goal == 0) {
+		for (let r = 0; r < height[difficulty];  r ++) 
+			for (let c = 0; c < width[difficulty];  c ++)
+				if (mineField[r][c]=='1')
+					document.getElementById(r + "-" + c).innerText = '\u2691';
 		gameOver = true;
 		alert("You have won!");
 	}

@@ -108,8 +108,8 @@ function setGame () {
 function setDiff () {
 	difficulty = difficulties.indexOf(this.id);
 	document.getElementById("field").setAttribute("class", diffs[difficulty]);
-	resetTiles();
 	document.getElementsByTagName("h1").innerText = difficulty;
+	resetTiles();
 	setGame();
 }
 
@@ -144,28 +144,22 @@ function checkTile () {
 					document.getElementById(i+"-"+j).click();
 	}
 	else {
-		for (let r = 0; r < height[difficulty];  r ++) 
-			for (let c = 0; c < width[difficulty];  c ++)
-				if (mineField[r][c]=='1')
-					document.getElementById(r + "-" + c).innerText = '\u263C';
-		if(confirm("You Lose!"))
-		{
-			resetTiles();
-			setGame();
-		}
-		else
+		setMinesImage('\u263C');
 		gameOver = true;
 	}
 	
 	if (goal == 0) {
-		for (let r = 0; r < height[difficulty];  r ++) 
-			for (let c = 0; c < width[difficulty];  c ++)
-				if (mineField[r][c]=='1')
-					document.getElementById(r + "-" + c).innerText = '\u2691';
+		setMinesImage('\u2691');
 		gameOver = true;
-		alert("You have won!");
 	}
 }
+
+function setMinesImage (ch) {
+	for (let r = 0; r < height[difficulty];  r ++) 
+		for (let c = 0; c < width[difficulty];  c ++)
+			if (mineField[r][c]=='1')
+				document.getElementById(r + "-" + c).innerText = ch;
+}	
 
 function checkMines (r, c) {
 	let numMines = 0;

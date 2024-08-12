@@ -95,6 +95,8 @@ function setGame () {
 			tile.classList.add("tile");
 			tile.classList.add("unchecked");
 			tile.addEventListener("click", checkTile);
+			tile.addEventListener("contextmenu", flag);
+			tile.addEventListener("contextmenu", (e) => {e.preventDefault()});
 			document.getElementById("field").append(tile);
 		}
 	}
@@ -105,11 +107,28 @@ function setGame () {
 		diffButtons[e].addEventListener("click", setDiff);
 }
 
+function flag () {
+	
+	if (gameOver) {
+		return;
+	}
+	
+	let coords = this.id.split("-");
+	let r = parseInt (coords[0]);
+	let c = parseInt (coords[1]);
+	
+	if (field[r][c] == 'x')
+		return;
+	
+	this.innerText = this.classList.contains ("flag") ?  "" : '\u2691';
+	this.classList.toggle("flag");
+}
+
 function setDiff () {
 	difficulty = difficulties.indexOf(this.id);
 	document.getElementById("field").setAttribute("class", diffs[difficulty]);
-	document.getElementsByTagName("h1").innerText = difficulty;
 	resetTiles();
+	document.getElementsByTagName("h1").innerText = difficulty;
 	setGame();
 }
 
@@ -129,7 +148,7 @@ function checkTile () {
 	let r = parseInt (coords[0]);
 	let c = parseInt (coords[1]);
 	
-	if (field[r][c] == 'x')
+	if (field[r][c] == 'x' || this.classList.contains("flag"))
 		return;
 	
 	goal--;
@@ -144,22 +163,32 @@ function checkTile () {
 					document.getElementById(i+"-"+j).click();
 	}
 	else {
-		setMinesImage('\u263C');
+		for (let r = 0; r < height[difficulty];  r ++) 
+			for (let c = 0; c < width[difficulty];  c ++) {
+				let t = document.getElementById(r + "-" + c);
+				if (mineField[r][c]=='1')
+					t.innerText = t.classList.contains("flag") ? '\u2691' : '\u263C';
+				else if (t.classList.contains("flag"))
+					t.innerText = 'X';
+			}
+		if(confirm("You Lose!"))
+		{
+			resetTiles();
+			setGame();
+		}
+		else
 		gameOver = true;
 	}
 	
 	if (goal == 0) {
-		setMinesImage('\u2691');
+		for (let r = 0; r < height[difficulty];  r ++) 
+			for (let c = 0; c < width[difficulty];  c ++)
+				if (mineField[r][c]=='1')
+					document.getElementById(r + "-" + c).innerText = '\u2691';
 		gameOver = true;
+		alert("You have won!");
 	}
 }
-
-function setMinesImage (ch) {
-	for (let r = 0; r < height[difficulty];  r ++) 
-		for (let c = 0; c < width[difficulty];  c ++)
-			if (mineField[r][c]=='1')
-				document.getElementById(r + "-" + c).innerText = ch;
-}	
 
 function checkMines (r, c) {
 	let numMines = 0;

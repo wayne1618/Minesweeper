@@ -148,8 +148,20 @@ function checkTile () {
 	let r = parseInt (coords[0]);
 	let c = parseInt (coords[1]);
 	
-	if (field[r][c] == 'x' || this.classList.contains("flag"))
+//	if (field[r][c] == 'x' || this.classList.contains("flag"))
+//		return;
+	
+	if (this.classList.contains("flag"))
 		return;
+	
+	if (field[r][c] == 'x') {
+		if (checkFlagged(r,c) == checkMines(r,c))
+			for (let i = Math.max (0, r - 1) ; i < Math.min (r + 2,height[difficulty]); i++)
+				for (let j = Math.max (0, c - 1) ; j < Math.min (c + 2,width[difficulty]); j++)
+					if (field[i][j] != 'x')
+						document.getElementById(i+"-"+j).click();
+		return;
+	}
 	
 	goal--;
 	
@@ -197,6 +209,15 @@ function checkMines (r, c) {
 			if (mineField[i][j] == '1')
 				numMines++;
 	return numMines;
+}
+
+function checkFlagged (r, c) {
+	let numFlags = 0;
+	for (let i = Math.max (0, r - 1); i < Math.min (height[difficulty], r + 2); i++)
+		for (let j = Math.max (0, c - 1); j < Math.min (width[difficulty], c + 2); j++)
+			if (document.getElementById(i + "-" + j).classList.contains("flag"))
+				numFlags++;
+	return numFlags;
 }
 	
 function shuffleMines () {

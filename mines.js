@@ -1,6 +1,11 @@
 var field;
 var mineField;
 var gameOver = false;
+const SMILEY = '\u263A';
+const DEATH = '\u2620';
+const WIN = '\u26C4';
+
+const FLAGS = ["", '\u2691', "?"];
 
 var goal;
 
@@ -22,6 +27,10 @@ window.onload = function () {
 function setGame () {
 	goal = width[difficulty] * height[difficulty] - totalMines[difficulty];
 	gameOver = false;
+	
+	let resetButton = document.getElementById("reset");
+	resetButton.addEventListener("click", newGame);
+	resetButton.innerText = SMILEY;
 	/*field =    [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
 				[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
 				[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -120,8 +129,16 @@ function flag () {
 	if (field[r][c] == 'x')
 		return;
 	
-	this.innerText = this.classList.contains ("flag") ?  "" : '\u2691';
+	this.innerText = FLAGS[(FLAGS.indexOf(this.innerText) + 1) % 3];
+	
+//	this.innerText = this.classList.contains ("flag") ?  "" : '\u2691';
+	if (this.innerText != "?")
 	this.classList.toggle("flag");
+}
+
+function newGame () {
+	resetTiles();
+	setGame();
 }
 
 function setDiff () {
@@ -183,13 +200,8 @@ function checkTile () {
 				else if (t.classList.contains("flag"))
 					t.innerText = 'X';
 			}
-		if(confirm("You Lose!"))
-		{
-			resetTiles();
-			setGame();
-		}
-		else
 		gameOver = true;
+		document.getElementById("reset").innerText = DEATH;
 	}
 	
 	if (goal == 0) {
@@ -198,7 +210,8 @@ function checkTile () {
 				if (mineField[r][c]=='1')
 					document.getElementById(r + "-" + c).innerText = '\u2691';
 		gameOver = true;
-		alert("You have won!");
+		
+		document.getElementById("reset").innerText = WIN;
 	}
 }
 

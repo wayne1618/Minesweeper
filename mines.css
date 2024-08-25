@@ -16,6 +16,11 @@ hr {
 	background-color: grey;
 }
 
+#reset {
+	font-size: 50;
+	float: center;
+}
+
 #field.beginner {
 	width: 256px;
 	height: 256px;

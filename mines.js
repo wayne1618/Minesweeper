@@ -4,6 +4,7 @@ var gameOver = false;
 const SMILEY = '\u263A';
 const DEATH = '\u2620';
 const WIN = '\u26C4';
+const COLOURS = ["", "blue", "green", "red", "navy", "maroon", "teal", "fuchsia", "black"];
 
 const FLAGS = ["", '\u2691', "?"];
 
@@ -186,6 +187,7 @@ function checkTile () {
 		field[r][c] = 'x';
 		this.classList.add("checked");
 		this.innerText = value[checkMines(r, c)];
+		this.style.color = COLOURS[value[checkMines(r, c)]];
 		if (checkMines(r,c)==0)	
 			for (let i = Math.max (0, r - 1); i < Math.min (height[difficulty], r + 2); i++)
 				for (let j = Math.max (0, c - 1); j < Math.min (width[difficulty], c + 2); j++)
